@@ -37,13 +37,16 @@ App showing Firebase Auth and Firebase Realtime DB to create a secure way to sto
     "gists": {
       "$gid": {
         ".read": "auth.uid === data.child('uid').val()",
-        ".write": "auth.uid === data.child('uid').val()"
+        ".write": "
+        	(!data.exists() && auth.uid === newData.child('uid').val()) ||
+          (data.exists() && auth.uid === data.child('uid').val())
+        "
       }
     },
     "userGists": {
-      "$uid": {
-        ".read": "auth.uid === $uid",
-        ".write": "auth.uid === $uid"
+			"$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
       }
     }
   }
